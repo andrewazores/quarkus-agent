@@ -1,0 +1,2 @@
+Premain-Class: es.andrewazor.QuarkusAgent
+Agent-class: es.andrewazor.QuarkusAgent
