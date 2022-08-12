@@ -35,55 +35,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package es.andrewazor.resteasyjackson;
+package es.andrewazor.cryostat;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Set;
 
-@Path("/resteasy-jackson/quarks")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
-public class JacksonResource {
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-    private final Set<Quark> quarks = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>()));
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+import org.jboss.resteasy.annotations.jaxrs.HeaderParam;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
-    public JacksonResource() {
-        quarks.add(new Quark("Up", "The up quark or u quark (symbol: u) is the lightest of all quarks, a type of elementary particle, and a major constituent of matter."));
-        quarks.add(new Quark("Strange", "The strange quark or s quark (from its symbol, s) is the third lightest of all quarks, a type of elementary particle."));
-        quarks.add(new Quark("Charm", "The charm quark, charmed quark or c quark (from its symbol, c) is the third most massive of all quarks, a type of elementary particle."));
-        quarks.add(new Quark("???", null));
-    }
+import es.andrewazor.cryostat.model.DiscoveryNode;
+import es.andrewazor.cryostat.model.RegistrationInfo;
+import io.vertx.core.json.JsonObject;
 
-    @GET
-    public Set<Quark> list() {
-        return quarks;
-    }
+@Path("/api/v2.2/discovery")
+@RegisterRestClient
+public interface CryostatService {
 
     @POST
-    public Set<Quark> add(Quark quark) {
-        quarks.add(quark);
-        return quarks;
-    }
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    JsonObject register(RegistrationInfo registrationInfo, @HeaderParam("Authorization") String auth);
 
     @DELETE
-    public Set<Quark> delete(Quark quark) {
-        quarks.removeIf(existingQuark -> existingQuark.name.contentEquals(quark.name));
-        return quarks;
-    }
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}")
+    void deregister(@PathParam String id, @HeaderParam("Authorization") String auth);
 
-    public static class Quark {
-        public String name;
-        public String description;
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}")
+    void update(@PathParam String id, @HeaderParam("Authorization") String auth, Set<DiscoveryNode> subtree);
 
-        public Quark() {
-        }
-
-        public Quark(String name, String description) {
-            this.name = name;
-            this.description = description;
-        }
-    }
 }

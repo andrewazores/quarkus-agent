@@ -35,20 +35,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package es.andrewazor.resteasyjackson;
+package es.andrewazor.cryostat;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.quarkus.jackson.ObjectMapperCustomizer;
+import io.vertx.core.json.JsonObject;
 
-import javax.inject.Singleton;
-
-@Singleton
-public class MyObjectMapperCustomizer implements ObjectMapperCustomizer {
-
-    @Override
-    public void customize(ObjectMapper objectMapper) {
-        // To suppress serializing properties with null values
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-    }
+class Response {
+    JsonObject meta;
+    JsonObject data;
 }

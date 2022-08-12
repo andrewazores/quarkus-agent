@@ -1,0 +1,21 @@
+quarkus:
+  http:
+    port: 9092
+  application:
+    name: cryostat-agent
+  shutdown:
+    timeout: 5s
+  tls:
+    trust-all: true
+
+# TODO remove JMX config
+es:
+  andrewazor:
+    cryostat:
+      registration-retry-period: 10s
+      jmxport: 9097
+      jmxhost: localhost
+      CryostatService/mp-rest/url: https://localhost:8181
+      CryostatService:
+        Authorization: None
+        callback-host: localhost

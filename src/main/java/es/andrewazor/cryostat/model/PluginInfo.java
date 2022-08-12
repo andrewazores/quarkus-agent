@@ -35,30 +35,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package es.andrewazor;
+package es.andrewazor.cryostat.model;
 
-import io.quarkus.logging.Log;
-import io.quarkus.runtime.Quarkus;
-import io.quarkus.runtime.annotations.QuarkusMain;
+public class PluginInfo {
+    private final String id;
+    private final String token;
 
-@QuarkusMain
-public class QuarkusAgent {
-
-    public static void main(String[] args) {
-        Runtime.getRuntime().addShutdownHook(new Thread(Quarkus::asyncExit));
-        Quarkus.run(args);
+    public PluginInfo(String id, String token) {
+        this.id = id;
+        this.token = token;
     }
 
-    public static void agentmain(String args) {
-        Log.info("Quarkus Agent starting...");
-        if (args == null) {
-            args = "";
-        }
-        main(args.split("\\s"));
+    public String getId() {
+        return id;
     }
 
-    public static void premain(String args) {
-        agentmain(args);
+    public String getToken() {
+        return token;
     }
-
 }
